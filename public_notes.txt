@@ -1,0 +1,102 @@
+sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
+sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
+
+sudo rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
+sudo yum install jenkins
+
+sudo service jenkins start
+sudo chkconfig --add jenkins
+
+
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com" 
+
+ssh-keygen -t rsa -b 4096 -C "rich.dobbs.13440+user_for_jenkins@gmail.com" 
+
+ssh-keygen -t rsa -b 4096 -C "rich.dobbs.13440@gmail.com" 
+
+
+Reset password (DIDN'T WORK##############################################):
+cd /var/lib/jenkins/users/rich.dobbs.13440@gmail.com
+sudo vi config.xml
+
+Remove contents of password hash:
+<hudson.security.HudsonPrivateSecurityRealm_-Details>
+      <passwordHash></passwordHash>
+</hudson.security.HudsonPrivateSecurityRealm_-Details>
+
+sudo service jenkins stop
+sudo service jenkins start
+
+Uninstall jenkins and start over:
+sudo service jenkins stop
+sudo yum remove jenkins
+
+
+Start again:
+
+sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
+sudo rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
+
+[ec2-user@ip-172-31-12-63 ~]$ sudo yum install jenkins
+Loaded plugins: priorities, update-motd, upgrade-helper
+Resolving Dependencies
+--> Running transaction check
+---> Package jenkins.noarch 0:2.52-1.1 will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+==========================================================================================================================================================================================
+ Package                                     Arch                                       Version                                         Repository                                   Size
+==========================================================================================================================================================================================
+Installing:
+ jenkins                                     noarch                                     2.52-1.1                                        jenkins                                      65 M
+
+Transaction Summary
+==========================================================================================================================================================================================
+Install  1 Package
+
+Total download size: 65 M
+Installed size: 66 M
+Is this ok [y/d/N]: y
+Downloading packages:
+jenkins-2.52-1.1.noarch.rpm                                                                                                                                        |  65 MB     00:27     
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Installing : jenkins-2.52-1.1.noarch                                                                                                                                                1/1 
+  Verifying  : jenkins-2.52-1.1.noarch                                                                                                                                                1/1 
+
+Installed:
+  jenkins.noarch 0:2.52-1.1                                                                                                                                                               
+
+Complete!
+[ec2-user@ip-172-31-12-63 ~]$ sudo service jenkins start
+Starting Jenkins                                           [  OK  ]
+
+ sudo chkconfig --add jenkins
+[ec2-user@ip-172-31-12-63 ~]$ 
+
+
+
+# Next access jenkins  from a web browser:
+http://54.70.226.162:8080/login?from=%2F
+Now, how to find the initial admin password???
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
+Use this to login, install initial plugsin and create the initial admin user.
+
+rich.dobbs.13440+jenkins@gmail.com
+
+
+Next, try to access github
+sudo -u jenkins ssh-keygen -t rsa
+sudo cat /var/lib/jenkins/.ssh/id_rsa.pub
+
+http://54.70.226.162:8080/credentials/store/system/domain/_/newCredentials
+Kind: SSH Username with private key
+Scope: System
+username: jenkins
+From file on jenkins master
+	/var/lib/jenkins/.ssh/id_rsa.pub
